@@ -54,3 +54,10 @@ Use the following arguments in the URL to change the request:
 
 ### When running in On-Demand mode
 Make sure you run the `!export-indicators-list-update` command for the first time to initialize the export process.
+
+<~XSOAR>
+Some XSOAR text
+</~XSOAR>
+<~XSIAM>
+Some XSIAM text
+</~XSIAM>

@@ -178,3 +178,10 @@ Memory issue can happen in CSV / JSON format over 150,000 if all fields are sele
 In 5 minutes (the default timeout of the integration) the integration can export between 200,000 to 400,000 indicators,
 depending on the load of the server, the existing indicators in the server, and the query used.
 The *NGINX Read Timeout* can be set to increase the timeout.
+
+<~XSOAR>
+Some XSOAR text
+</~XSOAR>
+<~XSIAM>
+Some XSIAM text
+</~XSIAM>
