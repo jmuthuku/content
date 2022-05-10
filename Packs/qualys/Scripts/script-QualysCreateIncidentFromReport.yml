@@ -60,7 +60,7 @@ script: >-
               demisto.results(resp)
               sys.exit(0)
 
-          asset_id = demisto.get(resp[0],'Contents.HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
+          asset_id = demisto.get(json.loads(xml2json(resp[0]['Contents'])),'HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
           if not asset_id:
               demisto.results( {
                   "Type" : entryTypes["error"],
