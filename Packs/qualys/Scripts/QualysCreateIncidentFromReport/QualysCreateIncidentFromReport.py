@@ -117,8 +117,11 @@ def get_asset_id_for_ip(ip):
     if isError(resp[0]):
         demisto.results(resp)
         sys.exit(0)
-    asset_id = demisto.get(json.loads(xml2json(resp[0]['Contents'])),
-                           'HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
+
+    try:
+        asset_id = demisto.get(resp[0], 'Contents.HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
+    except TypeError:  # for v2
+        asset_id = demisto.get(json.loads(xml2json(resp[0]['Contents'])), 'HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
     return asset_id
 
 
