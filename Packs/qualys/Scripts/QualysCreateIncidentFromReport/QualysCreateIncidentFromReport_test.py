@@ -3,6 +3,14 @@ from QualysCreateIncidentFromReport import main, get_asset_id_for_ip
 
 
 def test_main(mocker):
+    """
+        Tests the full flow of the script
+
+        Given: A valid report and successful responses
+        When: Running the QualysCreateIncidentReport script
+        Then: Return a successful response
+
+    """
     with open('test_data/qualys_host_list_rawresponse.xml') as f:
         raw_response = f.read()
     mocker.patch.object(demisto, 'args', return_value=dict())
@@ -17,6 +25,14 @@ def test_main(mocker):
 
 
 def test_get_asset_id_for_ip(mocker):
+    """
+           Tests parsing the data returned by qualys-host-list
+
+           Given: A valid response from qualys
+           When: Parsing for the incidentid
+           Then: Return a valid id
+
+       """
     with open('test_data/qualys_host_list_rawresponse.xml') as f:
         raw_response = f.read()
     mocker.patch.object(demisto, 'executeCommand', return_value=[{'Contents': raw_response, 'Type': 'note'}])

@@ -4,6 +4,21 @@ import demistomock as demisto  # noqa: F401
 from CommonServerPython import *  # noqa: F401
 
 
+def get_asset_id_for_ip(ip):
+    resp = demisto.executeCommand("qualys-host-list", {"ips": ip})
+    if isError(resp[0]):
+        demisto.results(resp)
+        sys.exit(0)
+
+    if isinstance(resp_dict := resp[0], dict) and isinstance(xml_string := resp_dict['Contents'], str):
+        json_string: str = xml2json(xml_string)
+        asset_id = demisto.get(json.loads(json_string), 'HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
+    else:
+        asset_id = demisto.get(resp[0], 'Contents.HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
+
+    return asset_id
+
+
 def main():
     incident_type = demisto.args().get("incidentType", "Vulnerability")
     max_file_size = int(demisto.args().get("maxFileSize", 1024 ** 2))
@@ -11,7 +26,7 @@ def main():
 
     file_entry = demisto.getFilePath(demisto.args().get("entryID"))
     with open(file_entry['path'], 'r') as f:
-        data = f.read(max_file_size).decode('unicode_escape').encode('utf-8')
+        data = f.read(max_file_size)
 
     if data:
         report = json.loads(xml2json(data))
@@ -110,19 +125,6 @@ def main():
             "ContentsFormat": formats["text"],
             "Contents": 'No data could be read.'
         })
-
-
-def get_asset_id_for_ip(ip):
-    resp = demisto.executeCommand("qualys-host-list", {"ips": ip})
-    if isError(resp[0]):
-        demisto.results(resp)
-        sys.exit(0)
-
-    try:
-        asset_id = demisto.get(resp[0], 'Contents.HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
-    except TypeError:  # for v2
-        asset_id = demisto.get(json.loads(xml2json(resp[0]['Contents'])), 'HOST_LIST_OUTPUT.RESPONSE.HOST_LIST.HOST.ID')
-    return asset_id
 
 
 if __name__ in ('__main__', '__builtin__', 'builtins'):
