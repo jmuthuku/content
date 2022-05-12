@@ -13,7 +13,7 @@ def test_main(mocker):
                                      [{"Contents": {"total": 1}, 'Type': 'notes'}]])
     demisto_results = mocker.spy(demisto, 'results')
     main()
-    demisto_results.assert_called_once_with("Donae.")
+    demisto_results.assert_called_once_with("Done.")
 
 
 def test_get_asset_id_for_ip(mocker):
